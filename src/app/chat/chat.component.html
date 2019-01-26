@@ -1,3 +1,27 @@
-<p>
-  chat works!
-</p>
+<div class="chat-container">
+  <mat-card class="main-card">
+    <mat-list *ngIf="messages | async as _messages" class="chat-list">
+      <mat-list-item *ngFor="let message of _messages" class="chat-list-item">
+        <h4 mat-line>
+          <b>{{message.from}}</b>
+        </h4>
+        <p mat-line>
+          <span> {{message.content}} </span>
+      </mat-list-item>
+    </mat-list>
+    <div class="chat-footer-container">
+      <div>
+        <mat-form-field>
+          <input matInput placeholder="Username" [formControl]="userNameControl">
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="chat-input">
+          <mat-icon matSuffix (click)="sendMessage()">message</mat-icon>
+          <input matInput #inputMessage maxlength="140" placeholder="Type your message" [formControl]="messageControl">
+          <mat-hint align="end">{{inputMessage.value.length}}/140</mat-hint>
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-card>
+</div>
