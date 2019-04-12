@@ -1,6 +1,7 @@
 <div class="chat-container">
     <mat-card class="main-card">
       <mat-list *ngIf="messages | async as _messages" class="chat-list">
+          
         <mat-list-item *ngFor="let message of _messages" class="chat-list-item">
           <h4 mat-line>
             <b>{{message.from}}</b>

@@ -31,7 +31,7 @@ export class ChatComponent implements OnInit {
 
   sendMessage() {
     this.socketSvc.
-    postMessage(this.userNameControl.value, this.messageControl.value)
+    postMessage(this.messageControl.value, this.userNameControl.value)
     .subscribe(val => console.log(val));
   }
 }

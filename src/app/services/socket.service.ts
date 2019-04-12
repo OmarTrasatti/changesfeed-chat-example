@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
 
 import { Observer } from 'rxjs';
@@ -9,9 +10,8 @@ import { Event } from '../model/event';
 
 import * as socketIo from 'socket.io-client';
 
-
-const FEED_URL = 'ws://admin:changeit@localhost:8080/chat/public/_feeds/public_feed/1';
-const MESSAGES_URL = 'http://admin:changeit@localhost:8080/chat/public?np';
+const FEED_URL = 'ws://admin:changeit@localhost:18080/chat/public/_streams/publicStream';
+const MESSAGES_URL = 'http://admin:changeit@localhost:18080/chat/public?np';
 
 @Injectable()
 export class SocketService {
@@ -24,6 +24,7 @@ export class SocketService {
 
         return Observable.create((observer: Observer<boolean>) => {
             socket.onmessage = function () {
+                console.log('New notification from WS.');
                 observer.next(true);
             };
         });
@@ -31,7 +32,11 @@ export class SocketService {
     }
 
     public getMessages(): Observable<Array<Message>> {
-        return this.http.get<Array<Message>>(MESSAGES_URL);
+        return this.http.get<any>(MESSAGES_URL)
+        .pipe(
+            map((res) => res._embedded),
+            map((res) => res['rh:doc'])
+        );
     }
     public postMessage(content: string, from: string): Observable<HttpResponse<any>> {
         return this.http
